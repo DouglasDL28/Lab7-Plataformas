@@ -1,16 +1,17 @@
 package com.example.douglasdeleon.lab7
 
+import com.example.douglasdeleon.lab7.R
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.douglasdeleon.lab7.adapters.ContactAdapter
 import com.example.douglasdeleon.lab7.data.Contact
 import com.example.douglasdeleon.lab7.viewmodels.ContactViewModel
@@ -69,9 +70,10 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(contact: Contact) {
                 var intent = Intent(baseContext, AddEditContactActivity::class.java)
                 intent.putExtra(AddEditContactActivity.EXTRA_ID, contact.id)
-                intent.putExtra(AddEditContactActivity.EXTRA_TITLE, contact.name)
-                intent.putExtra(AddEditContactActivity.EXTRA_DESCRIPTION, contact.email)
-                intent.putExtra(AddEditContactActivity.EXTRA_PRIORITY, contact.number)
+                intent.putExtra(AddEditContactActivity.EXTRA_NAME, contact.name)
+                intent.putExtra(AddEditContactActivity.EXTRA_EMAIL, contact.email)
+                intent.putExtra(AddEditContactActivity.EXTRA_NUMBER, contact.number)
+                intent.putExtra(AddEditContactActivity.EXTRA_PRIORITY, contact.priority)
 
                 startActivityForResult(intent, EDIT_CONTACT_REQUEST)
             }
@@ -101,8 +103,9 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == ADD_CONTACT_REQUEST && resultCode == Activity.RESULT_OK) {
             val newContact = Contact(
-                data!!.getStringExtra(AddEditContactActivity.EXTRA_TITLE),
-                data.getStringExtra(AddEditContactActivity.EXTRA_DESCRIPTION),
+                data!!.getStringExtra(AddEditContactActivity.EXTRA_NAME),
+                data.getStringExtra(AddEditContactActivity.EXTRA_EMAIL),
+                data.getIntExtra(AddEditContactActivity.EXTRA_PRIORITY, 1),
                 data.getIntExtra(AddEditContactActivity.EXTRA_PRIORITY, 1)
             )
             contactViewModel.insert(newContact)
@@ -112,12 +115,13 @@ class MainActivity : AppCompatActivity() {
             val id = data?.getIntExtra(AddEditContactActivity.EXTRA_ID, -1)
 
             if (id == -1) {
-                Toast.makeText(this, "Could not update! Error!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Could not update! Error!", Toast.LENGTH_SHORT).show()
             }
 
             val updateContact = Contact(
-                data!!.getStringExtra(AddEditContactActivity.EXTRA_TITLE),
-                data.getStringExtra(AddEditContactActivity.EXTRA_DESCRIPTION),
+                data!!.getStringExtra(AddEditContactActivity.EXTRA_NAME),
+                data.getStringExtra(AddEditContactActivity.EXTRA_EMAIL),
+                data.getIntExtra(AddEditContactActivity.EXTRA_NUMBER, 1),
                 data.getIntExtra(AddEditContactActivity.EXTRA_PRIORITY, 1)
             )
             updateContact.id = data.getIntExtra(AddEditContactActivity.EXTRA_ID, -1)

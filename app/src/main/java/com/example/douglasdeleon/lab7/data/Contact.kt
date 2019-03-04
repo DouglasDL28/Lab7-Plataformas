@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 class Contact (var name: String,
                var email: String,
                var number: Int,
-               var priority: Int,
-               @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-               var image: ByteArray?
+               var priority: Int
+//               @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+//               var image: ByteArray?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
